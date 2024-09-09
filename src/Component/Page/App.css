@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=SUSE:wght@100..800&display=swap');
+
+
+
+* {
+  font-family: 'SUSE', sans-serif;
+  background: #ddd;
+
+}
+
+.navbar{
+  padding : 20px ;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  border-bottom: 1px solid black;
+}
+.navbar h1 {
+  color :black;
+}
+
+.navbar .links{
+  margin-left: auto;
+  color :black;
+}
+
+.navbar a{
+  margin-left: 16px;
+  text-decoration: none;
+  padding : 6 px ;
+
+}
+
+.navbar a:hover{
+  color: grey;
+}
+
+
+.Title{
+  color :black;
+  text-align: center;
+  margin: 20px;
+  
+}
