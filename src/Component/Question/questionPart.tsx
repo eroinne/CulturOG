@@ -5,8 +5,8 @@ import { ApiRequest, jsonCreator } from "../../api";
 function QuestionPart() {
   const { type } = useParams<{ type: string }>(); // Récupérer le paramètre "type" de l'URL
   const [selectedType, setSelectedType] = useState(type); // Stocker le type sélectionné
-  const navigate = useNavigate(); // Pour naviguer dynamiquement dans l'URL
-  const [reponse, setReponse] = useState("");
+  const navigate = useNavigate(); 
+  const [reponse, setReponse] = useState(""); 
   const [estCorrect, setEstCorrect] = useState<boolean | null>(null);
   const [questionActuelle, setQuestionActuelle] = useState("");
   const [inputLocked, setInputLocked] = useState(false);
@@ -15,25 +15,24 @@ function QuestionPart() {
   // Lancer une nouvelle question lorsqu'on arrive sur la page
   useEffect(() => {
     nouvelleQuestion();
-  }, [selectedType]); // Dépendance à `selectedType` pour relancer si le type change
+  }, [selectedType]);
 
+  // Const pour gere la touche entre est la reponse 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && !inputLocked) {
       const reponseUtilisateur = (event.target as HTMLInputElement).value;
       setReponse(reponseUtilisateur);
 
-      // Vérification de la réponse
       if (reponseUtilisateur.toLowerCase() === bonneReponse.toLowerCase()) {
         setEstCorrect(true);
       } else {
         setEstCorrect(false);
       }
 
-      // Verrouille le champ une fois que la réponse est soumise
       setInputLocked(true);
     }
   };
-
+  // Const pour fair apelle a l'api changer de question est gere le reset de la function
   const nouvelleQuestion = async () => {
     const data = jsonCreator(selectedType ?? "");
     const question = await ApiRequest(data);
@@ -49,10 +48,11 @@ function QuestionPart() {
     setInputLocked(false);
   };
 
+  // Const pour changer de type de question
   const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newType = event.target.value;
     setSelectedType(newType);
-    navigate(`/question/${newType}`); // Naviguer vers une nouvelle URL avec le type mis à jour
+    navigate(`/question/${newType}`);
   };
 
   return (

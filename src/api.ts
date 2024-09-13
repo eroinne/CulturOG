@@ -1,5 +1,7 @@
-import axios from 'axios'; // Utilise import pour axios
+import axios from 'axios'; 
 
+
+//fucntion pour cree le json a envoyer 
 export function jsonCreator(type: string) {
   let data = {
     "contents": [
@@ -28,11 +30,11 @@ export function jsonCreator(type: string) {
     data.contents[0].parts[0].text = "Donne-moi une question générale.";
   }
 
-  // Convertir en JSON
+
   return JSON.stringify(data);
 }
 
-
+//fonciton pour fair la requte api 
 export async function ApiRequest(data: any) {
   let config = {
     method: 'post',
@@ -46,7 +48,7 @@ export async function ApiRequest(data: any) {
 
   try {
     const response = await axios.request(config);
-    console.log("Réponse de l'API :", response.data); // Vérifier la réponse
+    
     const textContent = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (textContent) {
       return parseQuestionAndAnswer(textContent);
@@ -59,6 +61,7 @@ export async function ApiRequest(data: any) {
   }
 }
 
+// function pour separer est formater la question est la reponse 
 function parseQuestionAndAnswer(fullText: { split: (arg0: string) => [any, any]; }) {
   const [questionPart, answerPart] = fullText.split("**Réponse :**");
 
