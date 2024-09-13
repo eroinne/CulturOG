@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { ApiRequest, jsonCreator } from "../../api";
 
 function QuestionPart() {
   const { type } = useParams<{ type: string }>(); // Récupérer le paramètre "type" de l'URL
@@ -7,22 +8,14 @@ function QuestionPart() {
   const navigate = useNavigate(); // Pour naviguer dynamiquement dans l'URL
   const [reponse, setReponse] = useState("");
   const [estCorrect, setEstCorrect] = useState<boolean | null>(null);
-  const [questionActuelle, setQuestionActuelle] = useState(0);
+  const [questionActuelle, setQuestionActuelle] = useState("");
   const [inputLocked, setInputLocked] = useState(false);
+  const [bonneReponse, setBonneReponse] = useState("");
 
-  //genere les question par API
-  const questions = [
-    {
-      texte: "Qui est l'inventeur des jarretelles ? ",
-      reponse: "Albert de Rotz",
-    },
-    {
-      texte: "Quelle est la capitale de la France ?",
-      reponse: "Paris",
-    },
-  ];
-
-  const bonneReponse = questions[questionActuelle].reponse;
+  // Lancer une nouvelle question lorsqu'on arrive sur la page
+  useEffect(() => {
+    nouvelleQuestion();
+  }, [selectedType]); // Dépendance à `selectedType` pour relancer si le type change
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && !inputLocked) {
@@ -41,8 +34,16 @@ function QuestionPart() {
     }
   };
 
-  const nouvelleQuestion = () => {
-    setQuestionActuelle((questionActuelle + 1) % questions.length);
+  const nouvelleQuestion = async () => {
+    const data = jsonCreator(selectedType ?? "");
+    const question = await ApiRequest(data);
+    if (typeof question === "object") {
+      setQuestionActuelle(question[0]);
+      console.log(question[1])
+      setBonneReponse(question[1]);
+    } else {
+      console.error('Unexpected response from ApiRequest');
+    }
     setReponse("");
     setEstCorrect(null);
     setInputLocked(false);
@@ -51,9 +52,7 @@ function QuestionPart() {
   const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newType = event.target.value;
     setSelectedType(newType);
-    setQuestionActuelle(0); // Réinitialiser à la première question
     navigate(`/question/${newType}`); // Naviguer vers une nouvelle URL avec le type mis à jour
-    nouvelleQuestion();
   };
 
   return (
@@ -71,14 +70,14 @@ function QuestionPart() {
           </option>
           <option value="Histoire">Histoire</option>
           <option value="Geographie">Geographie</option>
-          <option value="Personaliter">Personaliter</option>
+          <option value="Personnalité">Personnalité</option>
           <option value="Musique">Musique</option>
           <option value="Art">Art</option>
         </select>
       </div>
       <div className="pt-10 text-center">
         <p className="text-2xl">Question</p>
-        <p className="pt-2">{questions[questionActuelle].texte}</p>
+        <p className="pt-2">{questionActuelle}</p>
 
         <div className="flex justify-center pt-4">
           <input

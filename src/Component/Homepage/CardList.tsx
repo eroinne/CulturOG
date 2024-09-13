@@ -33,9 +33,9 @@ function CardList() {
         />
       </div>
 
-      <div className="pt-4" id="Personaliter">
+      <div className="pt-4" id="Personnalité">
         <Part
-          title="Personaliter"
+          title="Personnalité"
           color="#dc2f02"
           icon={faUser}
           content="Testez vos connaissances des personnalités"

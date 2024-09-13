@@ -47,7 +47,7 @@ function Body() {
 
         {/* Personaliter */}
         <div className="text-xl md:text-3xl" style={{ color: "#dc2f02" }}>
-          <a href="#Personaliter">
+          <a href="#Personnalité">
             <div className="flex-col">
               <FontAwesomeIcon
                 icon={faArrowRight}
